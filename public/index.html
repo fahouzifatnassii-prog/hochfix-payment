@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donner un pourboire 🤍</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f5f7;
+            color: #111;
+        }
+
+        /* ----- Image Apple Style (entière, non coupée) ----- */
+        .header-img {
+            width: 100%;
+            height: auto;          
+            object-fit: contain;   
+            display: block;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.20);
+        }
+
+        .container {
+            max-width: 430px;
+            margin: auto;
+            padding: 25px;
+            background: white;
+            margin-top: 15px;
+            border-radius: 22px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 26px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .subtext {
+            font-size: 16px;
+            color: #555;
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        /* ----- Montants ----- */
+        .amounts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .amount-btn {
+            flex: 1 1 calc(33.33% - 10px);
+            padding: 12px;
+            background: #f2f2f7;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .amount-btn:hover {
+            background: #e5e5ea;
+        }
+
+        .amount-btn.selected {
+            background: black;
+            color: white;
+        }
+
+        /* ----- Input libre ----- */
+        .custom-input {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        /* ----- Bouton principal ----- */
+        .pay-btn {
+            margin-top: 25px;
+            width: 100%;
+            background: black;
+            color: white;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pay-btn:hover {
+            background: #1a1a1a;
+        }
+
+    </style>
+
+    <script src="https://js.stripe.com/v3/"></script>
+
+</head>
+<body>
+
+    <!-- 🔥 Image header style Apple -->
+    <img src="ru.jpg" class="header-img" alt="Image accueil">
+
+    <div class="container">
+
+        <h1>Merci pour votre soutien 🤍</h1>
+
+        <p class="subtext">
+            Chaque pourboire compte énormément.  
+            Grâce à vous, notre équipe peut continuer à offrir un service chaleureux  
+            et une expérience exceptionnelle. Merci du fond du cœur 🙏
+        </p>
+
+        <!-- 🔥 Montants -->
+        <div class="amounts">
+            <div class="amount-btn" data-amount="2">2$</div>
+            <div class="amount-btn" data-amount="5">5$</div>
+            <div class="amount-btn" data-amount="10">10$</div>
+            <div class="amount-btn" data-amount="15">15$</div>
+            <div class="amount-btn" data-amount="20">20$</div>
+        </div>
+
+        <!-- Montant libre -->
+        <input type="number" id="customAmount" class="custom-input" placeholder="Montant libre ($)">
+
+        <!-- Bouton payer -->
+        <button class="pay-btn" id="payButton">Payer maintenant</button>
+
+    </div>
+
+    <script>
+        const amountButtons = document.querySelectorAll('.amount-btn');
+        const customAmountInput = document.getElementById("customAmount");
+        let selectedAmount = null;
+
+        amountButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                amountButtons.forEach(b => b.classList.remove("selected"));
+                btn.classList.add("selected");
+
+                selectedAmount = btn.dataset.amount;
+                customAmountInput.value = "";
+            });
+        });
+
+        customAmountInput.addEventListener("input", () => {
+            amountButtons.forEach(b => b.classList.remove("selected"));
+            selectedAmount = customAmountInput.value;
+        });
+
+        document.getElementById("payButton").addEventListener("click", async () => {
+            if (!selectedAmount || selectedAmount <= 0) {
+                alert("Veuillez choisir un montant 🙏");
+                return;
+            }
+
+            const amountInCents = Math.round(parseFloat(selectedAmount) * 100);
+
+            const response = await fetch("/create-checkout-session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ amount: amountInCents })
+            });
+
+            const session = await response.json();
+
+            const stripe = Stripe("pk_live_51PBadCHjRkXoIlIBv6NZxNHzlnTKmTz71hmYVp5ZeM1BCsCN5JSAfZHwnoOgGKl6Tphul44l7fD2r0NzsdzxPyEI007RlYQGAE");
+
+            stripe.redirectToCheckout({ sessionId: session.id });
+        });
+    </script>
+
+</body>
+</html>

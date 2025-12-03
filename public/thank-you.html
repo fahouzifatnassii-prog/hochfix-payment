@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merci pour votre pourboire ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Inter", sans-serif;
+            background: #f9fafb;
+            color: #333;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            background: white;
+            max-width: 500px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            animation: fadein 0.7s ease;
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .thank-img {
+            width: 260px;
+            height: auto;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            color: #111;
+        }
+
+        p {
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            color: #0070f3;
+            font-weight: bold;
+        }
+
+        /* 🎩 Nouveau bouton style Apple (noir, premium) */
+        .button {
+            display: inline-block;
+            margin-top: 25px;
+            background: black;
+            color: white;
+            padding: 14px 26px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.2s;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        }
+
+        .button:hover {
+            background: #1a1a1a;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <img src="Staff.jpg" alt="Merci" class="thank-img">
+
+        <h1>Merci du fond du cœur ❤️</h1>
+
+        <p>
+            Votre geste signifie énormément pour nous.  
+            Grâce à votre <span class="highlight">pourboire</span>, vous soutenez notre travail,
+            nos efforts, et toute l’équipe qui se donne chaque jour pour vous offrir le meilleur.
+        </p>
+
+        <p>
+            Votre générosité fait une réelle différence.  
+            Merci infiniment pour votre confiance et votre soutien 🤍
+        </p>
+
+        <!-- 🔥 Bouton noir premium Apple Style -->
+        <a class="button" href="/">Retour au paiement</a>
+
+    </div>
+
+</body>
+</html>
